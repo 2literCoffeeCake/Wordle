@@ -30,6 +30,6 @@ _ReSharper*/
 .vs/
 packages/
 Wordle/Client/node_modules
-Wordle/Client/**/*.js
+Wordle/Client/src/**/*.js
 *.js.map
 Wordle/wwwroot/js
