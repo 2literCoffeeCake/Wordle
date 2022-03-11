@@ -32,4 +32,4 @@ packages/
 Wordle/Client/node_modules
 Wordle/Client/src/**/*.js
 *.js.map
-Wordle/wwwroot/js
+Wordle/wwwroot/js/*.js
