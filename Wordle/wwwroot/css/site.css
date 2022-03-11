@@ -1,9 +1,4 @@
-﻿:root{
-    --left-column-width: 175px;
-    --right-column-width: 200px;
-}
-
-*{
+﻿* {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -20,55 +15,60 @@
 
 .app {
     display: grid;
-    grid-template-columns: 1fr ;
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: 50px 50px 1fr;
+    grid-template-columns: 100px 1fr 200px;
 }
 
-
-
-.navbar {
-    grid-column: 1 / 1;
+.menuButton {
+    grid-column: 1 / 2;
     grid-row: 1 / 2;
-    display: grid;
-    grid-template-columns: var(--left-column-width) 1fr var(--right-column-width);
-    grid-template-rows: 1fr;
 }
 
-    .navbar div{
+.header {
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+
+.timer {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}
+
+.menu--closed{
+    display: none;
+}
+
+.menu--open {
+    grid-column: 1 / 4;
+    grid-row: 1 / 4;
+    background: #2e2e2e;
+    opacity: 0.95;
+    z-index: 1;
+
+    display: grid;
+    grid-template-rows: 150px repeat(6, 45px) 250px;
+    grid-template-columns: 300px 1fr 300px;
+}
+
+    .menu--open > div {
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-content: center;
+        color: white;
+        font-size: 25px;
+        align-items: center;
     }
 
-    .navbar div:nth-child(1) {
-        grid-column: 1 / 2;
-        grid-row: 1 / 2;
-    }
-
-    .navbar div:nth-child(2) {
-        grid-column: 2 / 3;
-        grid-row: 1 / 2;
-    }
-
-    .navbar div:nth-child(3) {
-        grid-column: 3 / 4;
-        grid-row: 1 / 2;
-    }
+.menuItem:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
 
 .playground {
-    grid-column: 1 / 1;
-    grid-row: 2 / 3;
-    display: grid;
-    grid-template-columns: 1fr var(--right-column-width);
-    grid-template-rows: 50px 1fr;
+    grid-column: 1 / 4;
+    grid-row: 3 / 4;
 }
-
-    .playground div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .playground div:nth-child(1) {
-        grid-column: 2 / 3;
-        grid-row: 1 / 2;
-    }
