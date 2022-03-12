@@ -1,6 +1,7 @@
 ﻿import * as ReactDOM from 'react-dom';
 import * as React from 'react'
-import { App } from './App'
+import { App } from './App';
+import { Helper } from "./Helper";
 
 
 function build() {
@@ -12,6 +13,10 @@ function build() {
     }
     const word = getAttribute<string>("word");
     const level = getAttribute<number>("level");
+
+    const style = Helper.readFromClientStorage<"dark" | "light">(Helper.ClientStorageKeys.Style, "dark");
+    Helper.toggleStyle(style);
+
     ReactDOM.render(<App level={level} word={ word } />, root);
 }
 

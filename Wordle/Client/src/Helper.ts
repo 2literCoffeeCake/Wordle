@@ -1,5 +1,10 @@
 ﻿export class Helper {
 
+    public static ClientStorageKeys = {
+        Style: "Style",
+        UserName: "UserName"
+    }
+
     public static isEmpty(value: any) {
         return value == null || value == undefined;
     } 
@@ -10,6 +15,7 @@
         } else {
             document.body.classList.remove("dark");
         }
+        this.saveToClientStorage(this.ClientStorageKeys.Style, style);
         document.body.classList.add(style);
     }
 
@@ -24,4 +30,10 @@
     public static saveToClientStorage(key: string, object: any) {
         localStorage.setItem(`wordle__${key}`, object);
     }
+
+    public static async prompt<T>(message: string, defaultValue?: string) {
+        const result = await window.prompt(message, defaultValue);
+        return result as unknown as T;
+    }
+
 }

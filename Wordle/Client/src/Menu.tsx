@@ -1,35 +1,13 @@
-﻿import * as React from 'react'
+﻿import * as React from 'react';
+import { Helper } from './Helper'
+import { ToggleButton } from './components/ToggleButton';
 
 export class Menu extends React.Component<MenuProps, MenuState> {
-    private actions: LabelAction[] = [
-        {
-            label: "Weiter spielen",
-            action: () => {
-                this.props.toggleMenu(false);
-            }
-        },
-        {
-            label: "Neues Spiel",
-            action: () => {
-            }
-        },
-        {
-            label: "Rangliste",
-            action: () => {
-            }
-        },
-        {
-            label: "Einstellungen",
-            action: () => {
-                this.setState({ mode: MenuMode.Settings });
-            }
-        }
-    ];
-
     constructor(props) {
         super(props)
         this.state = {
-            mode: MenuMode.Start
+            mode: MenuMode.Start,
+            displayMode: Helper.readFromClientStorage<"dark"|"light">("Style", "dark")
         }
     }
 
@@ -37,39 +15,73 @@ export class Menu extends React.Component<MenuProps, MenuState> {
         this.props.toggleMenu(true);
     }
 
+    private toggleStyle = (value: boolean) => {
+        this.setState({ displayMode: value ? "dark" : "light" }, () => {
+            Helper.toggleStyle(value ? "dark" : "light");
+        });
+    }
+
+    private changeName = async () => {
+        const currentName = Helper.readFromClientStorage<string>(Helper.ClientStorageKeys.UserName, "Max Mustername Unleashed");
+        const name = await Helper.prompt<string>("Name eingeben", currentName);
+        if (!Helper.isEmpty(name) && name.trim() !== "") {
+            Helper.saveToClientStorage(Helper.ClientStorageKeys.UserName, name);
+        }
+    }
+
     private renderMenu = () => {
         switch (this.state.mode) {
             case MenuMode.Start:
-                return this.actions.map((action, index) => {
-                    return (
-                        <React.Fragment key={action.label}>
-                            <div style={{ gridColumn: "2/3", gridRow: `${index + 2}/${index + 3}` }} onClick={action.action} className="menuItem">
-                                {action.label}
-                            </div>
-                        </React.Fragment>
-                    );
-                });
+                return this.renderStart();
             case MenuMode.Settings:
-                return (
-                    <>
-                        <div style={{ gridColumn: "2/3", gridRow: "2/3" }} onClick={() => { this.setState({ mode: MenuMode.Start }) }} className="menuItem">
-                            Zurück
-                        </div>
-                        <div style={{ gridColumn: "2/3", gridRow: "3/4" }} onClick={() => { this.setState({ mode: MenuMode.Start }) }} className="menuItem">
-                            Zurück
-                        </div>
-                    </>
-                );
-                break;
+                return this.renderSettings();
         }
+    }
 
+    private renderStart = () => {
+        return (
+            <>
+                <div style={{ gridColumn: "2/3", gridRow: "2/3" }} onClick={() => { this.props.toggleMenu(false)}} className="menuItem">
+                    Weiter spielen
+                </div>
+                <div style={{ gridColumn: "2/3", gridRow: "3/4" }} onClick={() => {  }} className="menuItem">
+                    Neues Spiel
+                </div>
+                <div style={{ gridColumn: "2/3", gridRow: "4/5" }} onClick={() => { }} className="menuItem">
+                    Rangliste
+                </div>
+                <div style={{ gridColumn: "2/3", gridRow: "5/6" }} onClick={() => { this.setState({ mode: MenuMode.Settings }) }} className="menuItem">
+                    Einstellungen
+                </div>
+            </>
+        );
+    }
+
+    private renderSettings = () => {
+        return (
+            <>
+                <div style={{ gridColumn: "2/3", gridRow: "2/3" }} onClick={this.changeName} className="menuItem">
+                    Namen ändern
+                </div>
+                <div style={{ gridColumn: "2/3", gridRow: "3/4" }}>
+                    <ToggleButton value={this.state.displayMode === 'dark'} onChange={this.toggleStyle} />
+                </div>
+                <div style={{ gridColumn: "2/3", gridRow: "4/5" }} onClick={() => { this.setState({ mode: MenuMode.Start }) }} className="menuItem">
+                    Zurück
+                </div>
+            </>
+        );
     }
 
     render() {
         return (
             <>
-                <div className="menuButton" onClick={this.openMenu}>
-                    menu
+                <div className="menuButton">
+                    <svg viewBox="0 0 100 80" width="40" height="40" onClick={this.openMenu}>
+                        <rect width="100" height="10"></rect>
+                        <rect y="30" width="100" height="10"></rect>
+                        <rect y="60" width="100" height="10"></rect>
+                    </svg>
                 </div>
                 <div className={this.props.open ? "menu--open" : "menu--closed"}>
                     <div style={{ gridColumn: "2/3", gridRow: "1/2", fontSize: "55px" }}>
@@ -88,7 +100,8 @@ interface MenuProps {
 }
 
 interface MenuState {
-    mode: MenuMode
+    mode: MenuMode,
+    displayMode: "dark"|"light" 
 }
 
 enum MenuMode {

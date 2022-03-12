@@ -14,7 +14,6 @@ export class App extends React.Component<AppProps, AppState> {
         }
     }
 
-
     private toggleMenu = (menuOpen: boolean) => {
         if (menuOpen) {
             this.timerRef.stopInterval();

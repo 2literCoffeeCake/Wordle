@@ -1,19 +1,24 @@
 ﻿* {
-    height: 100%;
-    width: 100%;
     margin: 0;
     padding: 0;
+}
+
+body, html, div {
+    height: 100%;
+    width: 100%;
 }
 
 .light {
     --navbar-color: #1a237e;
     --background-color: #ffffff;
-    --font-color: #e8eaf6;
+    --navbar-font-color: #e8eaf6;
+    --font-color: #000000;
 }
 
 .dark {
     --navbar-color: #263238;
     --background-color: #37474f;
+    --navbar-font-color: #eceff1;
     --font-color: #eceff1;
 }
 
@@ -28,8 +33,17 @@
 .menuButton {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
+    color: var(--navbar-font-color);
     background-color: var(--navbar-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+    .menuButton svg {
+        cursor: pointer;
+        fill: var(--navbar-font-color)
+    }
 
 .header {
     grid-column: 2 / 4;
@@ -38,6 +52,7 @@
     justify-content: center;
     align-items: center;
     font-size: 25px;
+    color: var(--navbar-font-color);
     background-color: var(--navbar-color);
 }
 
