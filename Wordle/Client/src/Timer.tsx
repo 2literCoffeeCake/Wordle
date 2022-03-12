@@ -10,17 +10,29 @@ export class Timer extends React.Component<any, TimerState>{
         }
     }
 
-    componentWillUnmount() {
-        clearInterval(this.intervalTocken);
-    }
-
     private incrementTimer = () => {
         const timer = this.state.timer;
         this.setState({ timer: timer + 1 });
     }
 
-    componentDidMount() {
+    resetInterval = () => {
+        this.setState({ timer: 0 });
+    }
+
+    stopInterval = () => {
+        clearInterval(this.intervalTocken);
+    }
+
+    startInterval = () => {
         this.intervalTocken = setInterval(this.incrementTimer, 1000);
+    }
+
+    componentWillUnmount() {
+        this.stopInterval();
+    }
+
+    componentDidMount() {
+        this.startInterval();
     }
 
     private parseInt = (value: number) => {

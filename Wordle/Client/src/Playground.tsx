@@ -5,7 +5,6 @@ export class Playground extends React.Component<any, any> {
 
         return (
             <div className="playground">
-                Playground
             </div>
         );
     }
