@@ -2,6 +2,7 @@
 import { Helper } from './Helper'
 import { ToggleButton } from './components/ToggleButton';
 
+
 export class Menu extends React.Component<MenuProps, MenuState> {
     constructor(props) {
         super(props)
@@ -9,10 +10,6 @@ export class Menu extends React.Component<MenuProps, MenuState> {
             mode: MenuMode.Start,
             displayMode: Helper.readFromClientStorage<"dark"|"light">("Style", "dark")
         }
-    }
-
-    private openMenu = () => {
-        this.props.toggleMenu(true);
     }
 
     private toggleStyle = (value: boolean) => {
@@ -41,7 +38,7 @@ export class Menu extends React.Component<MenuProps, MenuState> {
     private renderStart = () => {
         return (
             <>
-                <div style={{ gridColumn: "2/3", gridRow: "2/3" }} onClick={() => { this.props.toggleMenu(false)}} className="menuItem">
+                <div style={{ gridColumn: "2/3", gridRow: "2/3" }} onClick={() => { }} className="menuItem">
                     Weiter spielen
                 </div>
                 <div style={{ gridColumn: "2/3", gridRow: "3/4" }} onClick={() => {  }} className="menuItem">
@@ -76,13 +73,6 @@ export class Menu extends React.Component<MenuProps, MenuState> {
     render() {
         return (
             <>
-                <div className="menuButton">
-                    <svg viewBox="0 0 100 80" width="40" height="40" onClick={this.openMenu}>
-                        <rect width="100" height="10"></rect>
-                        <rect y="30" width="100" height="10"></rect>
-                        <rect y="60" width="100" height="10"></rect>
-                    </svg>
-                </div>
                 <div className={this.props.open ? "menu--open" : "menu--closed"}>
                     <div style={{ gridColumn: "2/3", gridRow: "1/2", fontSize: "55px" }}>
                         Menu
@@ -96,7 +86,6 @@ export class Menu extends React.Component<MenuProps, MenuState> {
 
 interface MenuProps {
     open: boolean;
-    toggleMenu: (open: boolean) => void;
 }
 
 interface MenuState {
@@ -107,9 +96,4 @@ interface MenuState {
 enum MenuMode {
     Start,
     Settings
-}
-
-interface LabelAction {
-    label: string;
-    action: () => void;
 }

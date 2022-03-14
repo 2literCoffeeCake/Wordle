@@ -1,11 +1,10 @@
 ﻿* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body, html, div {
-    height: 100%;
-    width: 100%;
 }
 
 .light {
@@ -93,9 +92,4 @@ body, html, div {
 .menuItem:hover {
     cursor: pointer;
     text-decoration: underline;
-}
-
-.playground {
-    grid-column: 1 / 4;
-    grid-row: 3 / 4;
 }

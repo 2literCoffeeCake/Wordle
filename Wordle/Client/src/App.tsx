@@ -23,6 +23,11 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({ menuOpen: menuOpen })
     }
 
+    private onGameEnd = (win: boolean) => {
+        this.timerRef.stopInterval();
+
+    }
+
     render() {
         return (
             <div className="app">
@@ -30,11 +35,18 @@ export class App extends React.Component<AppProps, AppState> {
                     toggleMenu={this.toggleMenu}
                     open={this.state.menuOpen}
                 />
+                <div className="menuButton">
+                    <svg viewBox="0 0 100 80" width="40" height="40" onClick={() => { this.toggleMenu(true) }}>
+                        <rect width="100" height="10"></rect>
+                        <rect y="30" width="100" height="10"></rect>
+                        <rect y="60" width="100" height="10"></rect>
+                    </svg>
+                </div>                
                 <div className="header">
                     Wordle
                 </div>
                 <Timer ref={(ref) => { this.timerRef = ref }} />
-                <Playground />
+                <Playground level={this.props.level} word={this.props.word} onGameEnd={this.onGameEnd} />
             </div>
         );
     }
