@@ -6,13 +6,13 @@ import { Helper } from "./Helper";
 
 function build() {
     const root = document.getElementById("root"); 
-    function getAttribute<T>(name: string){
+    function getAttribute(name: string){
         const result = root.getAttribute(`data-${name}`);
         root.removeAttribute(`data-${name}`);
-        return result as unknown as T;
+        return result as string;
     }
-    const word = getAttribute<string>("word");
-    const level = getAttribute<number>("level");
+    const word = getAttribute("word");
+    const level = parseInt(getAttribute("level"));
 
     const style = Helper.readFromClientStorage<"dark" | "light">(Helper.ClientStorageKeys.Style, "dark");
     Helper.toggleStyle(style);

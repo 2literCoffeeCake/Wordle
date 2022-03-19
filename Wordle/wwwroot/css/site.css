@@ -5,6 +5,7 @@
 }
 
 body, html, div {
+    height: 100%;
 }
 
 .light {
@@ -24,13 +25,13 @@ body, html, div {
 .app {
     display: grid;
     grid-template-rows: 50px 50px 1fr;
-    grid-template-columns: 100px 1fr 200px;
+    grid-template-columns: 1fr 200px;
     color: var(--font-color);
     background-color: var(--background-color);
 }
 
 .menuButton {
-    grid-column: 1 / 2;
+    grid-column: 2/3;
     grid-row: 1 / 2;
     color: var(--navbar-font-color);
     background-color: var(--navbar-color);
@@ -45,7 +46,7 @@ body, html, div {
     }
 
 .header {
-    grid-column: 2 / 4;
+    grid-column: 1 / 2;
     grid-row: 1 / 2;
     display: flex;
     justify-content: center;
@@ -56,7 +57,7 @@ body, html, div {
 }
 
 .timer {
-    grid-column: 3 / 4;
+    grid-column: 2/3;
     grid-row: 2 / 3;
     display: flex;
     justify-content: center;

@@ -24,7 +24,7 @@ export class Playground extends React.Component<PlaygroundProps, PlaygroundState
     private renderGuesses = () => {
         const guesses = [];
 
-        for (let i = 0; i < this.state.attempt + 1; i++) {
+        for (let i = 0; i < 6; i++) {
             guesses.push(
                 <React.Fragment key={`guess_${i}`}>
                     <Guess
@@ -32,6 +32,7 @@ export class Playground extends React.Component<PlaygroundProps, PlaygroundState
                         level={this.props.level}
                         word={this.props.word}
                         onGuessEnd={this.onGuessEnd}
+                        isActive={this.state.attempt == i}
                     />
                 </React.Fragment>
             );
@@ -40,10 +41,14 @@ export class Playground extends React.Component<PlaygroundProps, PlaygroundState
         return guesses;
     }
 
+
+
     render() {
         return (
-            <div className="playground">
-                {this.renderGuesses()}
+            <div className="playground" style={{ gridTemplateColumns: `1fr ${this.props.level * 110}px 1fr` }}>
+                <div>
+                    {this.renderGuesses()}
+                </div>
             </div>
         );
     }
@@ -58,13 +63,21 @@ interface PlaygroundProps {
 interface PlaygroundState {
     attempt: number;
 }
+//
+//#546e7a
 
 class Guess extends React.Component<GuessProps, GuessState>{
 
     constructor(props) {
         super(props);
         this.state = {
-            chars: []
+            chars: Array(this.props.level).fill("").map((char) => {
+                return {
+                    char: char,
+                    state: CharState.Present
+                }
+            }),
+            index: 0
         }
     }
 
@@ -74,21 +87,21 @@ class Guess extends React.Component<GuessProps, GuessState>{
         const a = 65;
         const z = 90;
 
-        if (event.keyCode >= a && event.keyCode <= z) {
+        if (event.keyCode >= a && event.keyCode <= z && !event.ctrlKey && !event.shiftKey && !event.altKey) {
             this.addChar(event.key.toUpperCase())
         } 
     }
 
     private addChar = (char: string) => {
-        if (this.state.chars.length < this.props.level) {
-            const chars = this.state.chars;
-            chars.push({
-                char: char[0],
+        if (this.state.index < this.props.level) {
+            let chars = this.state.chars;
+            chars[this.state.index] = {
+                char: char,
                 state: CharState.Unknown
-            });
-            this.setState({ chars: chars }, () => {
-                if (this.state.chars.length >= this.props.level) {
-                    document.removeEventListener("keydown", this.onKeyPress);
+            };
+            this.setState({ chars: chars, index: this.state.index + 1 }, () => {
+                if (this.state.index >= this.props.level) {
+                    this.removeEventListener();
                     this.setState({ chars: PlaygroundHelper.compareChars(this.state.chars, this.props.word) }, () => {
                         const guess = this.state.chars.map((c) => { return c.char }).join("").toUpperCase();
                         this.props.onGuessEnd(guess);
@@ -100,20 +113,40 @@ class Guess extends React.Component<GuessProps, GuessState>{
     }
 
     componentDidMount() {
+        if (this.props.isActive)
+            this.addEventListener()
+    }
+
+    componentDidUpdate() {
+        if (this.props.isActive)
+            this.addEventListener()
+        else 
+            this.removeEventListener();
+    }
+
+    componentWillUnmount() {
+        this.removeEventListener();
+    }
+
+    private removeEventListener = () => {
+        document.removeEventListener("keydown", this.onKeyPress)
+    }
+
+    private addEventListener = () => {
         document.addEventListener("keydown", this.onKeyPress)
     }
 
     private mapChar = (char: Char, pos: number) => {
         return (
-            <React.Fragment key={`${this.props.attempt}_${char}_${pos}`}>
-                <Letter char={char} pos={pos + 1} />
+            <React.Fragment key={`letter_${this.props.attempt}_${pos}`}>
+                <Letter char={char} pos={pos} attempt={this.props.attempt} />
             </React.Fragment>
         );
     }
 
     render() {
         return (
-            <div className="guess" style={{ gridTemplateColumns: `repeat(${this.props.level}, 1fr)` }}>
+            <div className={`guess ${this.props.isActive ? "guess--active": ""}`}>
                 {this.state.chars.map(this.mapChar)}
             </div>
         );
@@ -155,10 +188,12 @@ interface GuessProps {
     level: number;
     attempt: number;
     onGuessEnd: (guess: string) => boolean;
+    isActive: boolean;
 }
 
 interface GuessState {
     chars: Char[];
+    index: number;
 }
 
 
@@ -189,10 +224,8 @@ class Letter extends React.Component<LetterProps, any>{
 
     render() {
         return (
-            <div className={this.getClass()} style={{ gridColumn: `${this.props.pos}/${this.props.pos + 1}` }}>
-                <div>
-                    {this.props.char.char}
-                </div>
+            <div className={this.getClass()} style={{ gridRow: `${this.props.attempt}/${this.props.attempt}`, gridColumn: `${this.props.pos + 1}/${this.props.pos + 2}` }}>
+                {this.props.char.char}
             </div>
         );
     }
@@ -200,6 +233,7 @@ class Letter extends React.Component<LetterProps, any>{
 }
 
 interface LetterProps {
+    attempt: number;
     pos: number;
     char: Char;
 }

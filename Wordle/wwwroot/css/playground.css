@@ -2,21 +2,41 @@
     grid-column: 1 / 4;
     grid-row: 3 / 4;
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 1fr)
+    padding-bottom: 10px;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
+    .playground > div {
+        grid-column: 2/3;
+        display: grid;
+        grid-template-rows: repeat(6, 1fr);
+        grid-template-columns: 1fr;
+        border-style: solid;
+    }
 
 .guess {
     display: grid;
-    grid-template-rows: 150px;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(5, 1fr);
+    border-style: solid;
+    border-width: 0 1.5px 1.5px 0;
+}
+
+.guess--active {
+    background-color: #455a64;
 }
 
 .letter {
-    grid-row: 1/1;    
-    padding: 10px
+    padding: 10px;
+    font-size: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-width: 0 0 0 1.5px;
 }
 
-    .letter > div {
+    /*.letter > div {
         border-style: solid;
         border-width: 10px;
         display: flex;
@@ -36,4 +56,4 @@
 
 .letter--correct {
     color: #2e7d32;
-}
+}*/

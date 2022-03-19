@@ -32,7 +32,6 @@ export class App extends React.Component<AppProps, AppState> {
         return (
             <div className="app">
                 <Menu
-                    toggleMenu={this.toggleMenu}
                     open={this.state.menuOpen}
                 />
                 <div className="menuButton">
