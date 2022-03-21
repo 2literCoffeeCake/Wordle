@@ -1,11 +1,8 @@
 ﻿import * as React from 'react'
-import { Playground } from './Playground';
-import { Timer } from './Timer';
-import { Menu} from './Menu';
+import { Playground } from './playground/Playground';
+import { Navbar } from './navbar/Navbar';
 
 export class App extends React.Component<AppProps, AppState> {
-
-    private timerRef: Timer;
 
     constructor(props) {
         super(props);
@@ -14,42 +11,29 @@ export class App extends React.Component<AppProps, AppState> {
         }
     }
 
-    private toggleMenu = (menuOpen: boolean) => {
-        if (menuOpen) {
-            this.timerRef.stopInterval();
-        } else {
-            this.timerRef.startInterval();
-        }
-        this.setState({ menuOpen: menuOpen })
-    }
-
-    private onGameEnd = (win: boolean) => {
-        this.timerRef.stopInterval();
-
-    }
-
     render() {
         return (
             <div className="app">
-                <Menu
-                    open={this.state.menuOpen}
-                />
-                <div className="menuButton">
+                <Navbar />
+                <Playground level={this.props.level} word={this.props.word}/>
+            </div>
+        );
+    }
+}
+
+/*
+                
+
+                 <div className="menuButton">
                     <svg viewBox="0 0 100 80" width="40" height="40" onClick={() => { this.toggleMenu(true) }}>
                         <rect width="100" height="10"></rect>
                         <rect y="30" width="100" height="10"></rect>
                         <rect y="60" width="100" height="10"></rect>
                     </svg>
-                </div>                
-                <div className="header">
-                    Wordle
-                </div>
-                <Timer ref={(ref) => { this.timerRef = ref }} />
-                <Playground level={this.props.level} word={this.props.word} onGameEnd={this.onGameEnd} />
-            </div>
-        );
-    }
-}
+                </div>     
+ 
+ */ 
+
 
 interface AppProps {
     word: string;

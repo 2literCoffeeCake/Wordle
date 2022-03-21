@@ -1,70 +1,8 @@
 ﻿import * as React from 'react'
-import { Helper } from './Helper';
+import { Helper } from '../Helper';
+import { Char, CharState, Letter } from './Letter';
 
-export class Playground extends React.Component<PlaygroundProps, PlaygroundState> {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            attempt: 0
-        }
-    }
-
-    private onGuessEnd = (guess: string) => {
-        const result = guess === this.props.word.toUpperCase();
-        const attempt = this.state.attempt + 1
-        if (attempt < 6) {
-            this.setState({ attempt: attempt });
-        } else {
-            this.props.onGameEnd(result);
-        }
-        return result;
-    }
-
-    private renderGuesses = () => {
-        const guesses = [];
-
-        for (let i = 0; i < 6; i++) {
-            guesses.push(
-                <React.Fragment key={`guess_${i}`}>
-                    <Guess
-                        attempt={this.state.attempt}
-                        level={this.props.level}
-                        word={this.props.word}
-                        onGuessEnd={this.onGuessEnd}
-                        isActive={this.state.attempt == i}
-                    />
-                </React.Fragment>
-            );
-
-        }
-        return guesses;
-    }
-
-
-
-    render() {
-        return (
-            <div className="playground" style={{ gridTemplateColumns: `1fr ${this.props.level * 110}px 1fr` }}>
-                <div>
-                    {this.renderGuesses()}
-                </div>
-            </div>
-        );
-    }
-}
-
-interface PlaygroundProps {
-    word: string;
-    level: number;
-    onGameEnd: (win: boolean) => void;
-}
-
-interface PlaygroundState {
-    attempt: number;
-}
-
-class Guess extends React.Component<GuessProps, GuessState>{
+export class Guess extends React.Component<GuessProps, GuessState>{
 
     constructor(props) {
         super(props);
@@ -86,7 +24,7 @@ class Guess extends React.Component<GuessProps, GuessState>{
 
         if (event.keyCode >= a && event.keyCode <= z && !event.ctrlKey && !event.shiftKey && !event.altKey) {
             this.addChar(event.key.toUpperCase())
-        } 
+        }
     }
 
     private addChar = (char: string) => {
@@ -117,7 +55,7 @@ class Guess extends React.Component<GuessProps, GuessState>{
     componentDidUpdate() {
         if (this.props.isActive)
             this.addEventListener()
-        else 
+        else
             this.removeEventListener();
     }
 
@@ -151,6 +89,20 @@ class Guess extends React.Component<GuessProps, GuessState>{
 
 }
 
+
+interface GuessProps {
+    word: string;
+    level: number;
+    attempt: number;
+    onGuessEnd: (guess: string) => boolean;
+    isActive: boolean;
+}
+
+interface GuessState {
+    chars: Char[];
+    index: number;
+}
+
 class PlaygroundHelper {
     public static compareChars = (chars: Char[], word: string) => {
         const letters = word.split('');
@@ -178,60 +130,4 @@ class PlaygroundHelper {
 
         return chars;
     }
-}
-
-interface GuessProps {
-    word: string;
-    level: number;
-    attempt: number;
-    onGuessEnd: (guess: string) => boolean;
-    isActive: boolean;
-}
-
-interface GuessState {
-    chars: Char[];
-    index: number;
-}
-
-
-interface Char {
-    char: string;
-    state: CharState;
-}
-
-enum CharState {
-    Unknown,
-    Present,
-    Correct
-}
-
-class Letter extends React.Component<LetterProps, any>{
-
-
-    private getClass = () => {
-        let className = "letter " + (this.props.isActive ? "letter--active " : "");
-        switch (this.props.char.state) {
-            case CharState.Unknown:
-                return className + "letter--unknown";
-            case CharState.Present:
-                return className + "letter--present";
-            case CharState.Correct:
-                return className + "letter--correct";
-        }
-    }
-
-    render() {
-        return (
-            <div className={this.getClass()} style={{ gridRow: "1/2", gridColumn: `${this.props.pos + 1}/${this.props.pos + 2}` }}>
-                {this.props.char.char}
-            </div>
-        );
-    }
-
-}
-
-interface LetterProps {
-    pos: number;
-    char: Char;
-    isActive: boolean;
 }
