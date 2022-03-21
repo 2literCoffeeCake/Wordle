@@ -7,19 +7,21 @@ namespace Wordle.Service
     public class WordReaderService
     {
         private readonly IWebHostEnvironment _Environment;
+        private readonly int _MinLvel = 4;
+        private readonly int _MaxLvel = 10;
         public WordReaderService(IWebHostEnvironment environment)
         {
             _Environment = environment;
         }
         public string GetRandomWord(ref int level)
         {
-            if (level < 4)
+            if (level < _MinLvel)
             {
-                level = 4;
+                level = _MinLvel;
             }
-            if(level > 9)
+            if(level > _MaxLvel)
             {
-                level = 9;
+                level = _MaxLvel;
             }
             var path = Path.Combine(_Environment.WebRootPath, $"datasource/{level}.txt");
             var lines = File.ReadAllLines(path);

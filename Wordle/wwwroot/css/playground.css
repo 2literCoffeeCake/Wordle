@@ -17,7 +17,6 @@
 .guess {
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: repeat(5, 1fr);
     border-style: solid;
     border-width: 0 1.5px 1.5px 0;
 }
@@ -32,19 +31,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-color: var(--font-color);
     border-style: solid;
     border-width: 0 0 0 1.5px;
 }
 
-    /*.letter > div {
-        border-style: solid;
-        border-width: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 75px;
-        font-family: sans-serif
-    }
+.letter--active {
+    background-color: #546e7a;
+}
 
 .letter--unknown {
     color: var(--font-color);
@@ -56,4 +50,4 @@
 
 .letter--correct {
     color: #2e7d32;
-}*/
+}

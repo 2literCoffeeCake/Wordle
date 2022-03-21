@@ -13,7 +13,7 @@ export class Playground extends React.Component<PlaygroundProps, PlaygroundState
     private onGuessEnd = (guess: string) => {
         const result = guess === this.props.word.toUpperCase();
         const attempt = this.state.attempt + 1
-        if (attempt < this.props.level) {
+        if (attempt < 6) {
             this.setState({ attempt: attempt });
         } else {
             this.props.onGameEnd(result);
@@ -63,8 +63,6 @@ interface PlaygroundProps {
 interface PlaygroundState {
     attempt: number;
 }
-//
-//#546e7a
 
 class Guess extends React.Component<GuessProps, GuessState>{
 
@@ -74,7 +72,7 @@ class Guess extends React.Component<GuessProps, GuessState>{
             chars: Array(this.props.level).fill("").map((char) => {
                 return {
                     char: char,
-                    state: CharState.Present
+                    state: CharState.Unknown
                 }
             }),
             index: 0
@@ -83,7 +81,6 @@ class Guess extends React.Component<GuessProps, GuessState>{
 
 
     private onKeyPress = (event: KeyboardEvent) => {
-        //const backspace = 8;
         const a = 65;
         const z = 90;
 
@@ -139,14 +136,14 @@ class Guess extends React.Component<GuessProps, GuessState>{
     private mapChar = (char: Char, pos: number) => {
         return (
             <React.Fragment key={`letter_${this.props.attempt}_${pos}`}>
-                <Letter char={char} pos={pos} attempt={this.props.attempt} />
+                <Letter char={char} pos={pos} isActive={pos == this.state.index && this.props.isActive} />
             </React.Fragment>
         );
     }
 
     render() {
         return (
-            <div className={`guess ${this.props.isActive ? "guess--active": ""}`}>
+            <div className={`guess ${this.props.isActive ? "guess--active" : ""}`} style={{ gridTemplateColumns: `repeat(${this.props.level}, 1fr)` }}>
                 {this.state.chars.map(this.mapChar)}
             </div>
         );
@@ -212,19 +209,20 @@ class Letter extends React.Component<LetterProps, any>{
 
 
     private getClass = () => {
+        let className = "letter " + (this.props.isActive ? "letter--active " : "");
         switch (this.props.char.state) {
             case CharState.Unknown:
-                return "letter letter--unknown";
+                return className + "letter--unknown";
             case CharState.Present:
-                return "letter letter--present";
+                return className + "letter--present";
             case CharState.Correct:
-                return "letter letter--correct";
+                return className + "letter--correct";
         }
     }
 
     render() {
         return (
-            <div className={this.getClass()} style={{ gridRow: `${this.props.attempt}/${this.props.attempt}`, gridColumn: `${this.props.pos + 1}/${this.props.pos + 2}` }}>
+            <div className={this.getClass()} style={{ gridRow: "1/2", gridColumn: `${this.props.pos + 1}/${this.props.pos + 2}` }}>
                 {this.props.char.char}
             </div>
         );
@@ -233,7 +231,7 @@ class Letter extends React.Component<LetterProps, any>{
 }
 
 interface LetterProps {
-    attempt: number;
     pos: number;
     char: Char;
+    isActive: boolean;
 }
